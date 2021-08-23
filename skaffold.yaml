@@ -2,27 +2,29 @@ apiVersion: skaffold/v2alpha3
 kind: Config
 
 deploy:
-  kubectl:
-    manifests:
-      - ./infra/k8s/*
+    kubectl:
+        manifests:
+            - ./infra/k8s/*
 
 build:
-  local:
-    push: false
-  artifacts:
-    - image: mehdisaffar/auth
-      context: auth
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: 'src/**/*.ts'
-            dest: .
-    - image: mehdisaffar/client
-      context: client
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: '**/*.js'
-            dest: .
+    local:
+        push: false
+    artifacts:
+        - image: mehdisaffar/auth
+          context: auth
+          docker:
+              dockerfile: Dockerfile
+              buildArgs:
+                  NPM_TOKEN: "{{.NPM_TOKEN}}"
+          sync:
+              manual:
+                  - src: 'src/**/*.ts'
+                    dest: .
+        - image: mehdisaffar/client
+          context: client
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: '**/*.js'
+                    dest: .

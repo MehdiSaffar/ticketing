@@ -32,13 +32,6 @@ afterAll(async () => {
     await mongoose.connection.close()
 })
 
-// declare global {
-//     namespace NodeJS {
-//         export interface Global {
-//             signin(): Promise<string[]>
-//         }
-//     }
-// }
 
 declare global {
     var signin: () => Promise<request.SuperAgentTest>
