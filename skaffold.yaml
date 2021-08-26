@@ -14,8 +14,6 @@ build:
           context: auth
           docker:
               dockerfile: Dockerfile
-              buildArgs:
-                  NPM_TOKEN: "{{.NPM_TOKEN}}"
           sync:
               manual:
                   - src: 'src/**/*.ts'
@@ -27,4 +25,12 @@ build:
           sync:
               manual:
                   - src: '**/*.js'
+                    dest: .
+        - image: mehdisaffar/tickets
+          context: tickets
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: 'src/**/*.ts'
                     dest: .
