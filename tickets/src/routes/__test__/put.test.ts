@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import request from 'supertest'
 import { app } from '../../app'
+import { natsWrapper } from '../../nats-wrapper'
 
 const title = 'different concert'
 const price = 40
@@ -65,10 +66,21 @@ it('updates the ticket with valid inputs', async () => {
         .send({ title, price })
         .expect(200)
 
-    const response = await agent
-        .get(`/api/tickets/${ticket.id}`)
-        .expect(200)
+    const response = await agent.get(`/api/tickets/${ticket.id}`).expect(200)
 
     expect(response.body.title).toEqual(title)
     expect(response.body.price).toEqual(price)
+})
+
+it('publishes an event', async () => {
+    const agent = global.signin()
+
+    const ticket = await createTicket(agent)
+
+    await agent
+        .put(`/api/tickets/${ticket.id}`)
+        .send({ title, price })
+        .expect(200)
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled()
 })
