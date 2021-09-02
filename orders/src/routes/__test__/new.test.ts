@@ -60,15 +60,18 @@ it('reserves a ticket', async () => {
         .expect(201)
 })
 
-// it.todo('publishes an event', async () => {
-//     await global
-//         .signin()
-//         .post('/api/orders')
-//         .send({
-//             title: 'concert',
-//             price: 20
-//         })
-//         .expect(201)
+it('publishes an event', async () => {
+    const ticket = Ticket.build({
+        title: 'concert',
+        price: 20
+    })
+    await ticket.save()
 
-//     expect(natsWrapper.client.publish).toHaveBeenCalled()
-// })
+    await global
+        .signin()
+        .post('/api/orders')
+        .send({ ticketId: ticket.id })
+        .expect(201)
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled()
+})

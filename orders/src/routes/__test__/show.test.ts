@@ -1,4 +1,5 @@
 import { Ticket } from '../../models/ticket'
+import { natsWrapper } from '../../nats-wrapper'
 
 it('returns the order', async () => {
     const agent = global.signin()
