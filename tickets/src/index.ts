@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 import { app } from './app'
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener'
+import { OrderCreatedListener } from './events/listeners/order-created-listener'
 import { natsWrapper } from './nats-wrapper'
 
 const envKeys = [
@@ -53,6 +55,9 @@ const start = async () => {
     } catch (e) {
         console.error(e)
     }
+
+    new OrderCreatedListener(natsWrapper.client).listen()
+    new OrderCancelledListener(natsWrapper.client).listen()
 
     app.listen(3000, () => {
         console.log('Listening on port 3000')
