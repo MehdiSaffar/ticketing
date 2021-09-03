@@ -8,6 +8,7 @@ const price = 20
 
 const createTicket = async () => {
     const ticket = Ticket.build({
+        id: new mongoose.Types.ObjectId().toHexString(),
         title,
         price
     })

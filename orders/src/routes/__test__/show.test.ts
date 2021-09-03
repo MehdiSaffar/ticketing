@@ -1,9 +1,10 @@
 import { Ticket } from '../../models/ticket'
-import { natsWrapper } from '../../nats-wrapper'
+import mongoose from 'mongoose'
 
 it('returns the order', async () => {
     const agent = global.signin()
     const ticket = Ticket.build({
+        id: mongoose.Types.ObjectId().toHexString(),
         title: 'concert',
         price: 20
     })
@@ -26,6 +27,7 @@ it('return 401 when the user is not the owner', async () => {
     const otherAgent = global.signin()
 
     const ticket = Ticket.build({
+        id: mongoose.Types.ObjectId().toHexString(),
         title: 'concert',
         price: 20
     })

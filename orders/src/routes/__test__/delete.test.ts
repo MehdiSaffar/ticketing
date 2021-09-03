@@ -10,6 +10,7 @@ const price = 20
 
 const createTicket = async () => {
     const ticket = Ticket.build({
+        id: mongoose.Types.ObjectId().toHexString(),
         title,
         price
     })
@@ -41,6 +42,7 @@ it('publishes an event', async () => {
     const agent = global.signin()
 
     const ticket = Ticket.build({
+        id: mongoose.Types.ObjectId().toHexString(),
         title: 'concert',
         price: 20
     })
