@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import request from 'supertest'
 import { app } from '../../app'
+import { Ticket } from '../../models/ticket'
 import { natsWrapper } from '../../nats-wrapper'
 
 const title = 'different concert'
@@ -83,4 +84,16 @@ it('publishes an event', async () => {
         .expect(200)
 
     expect(natsWrapper.client.publish).toHaveBeenCalled()
+})
+
+it('rejects updated if the ticket is reserved', async () => {
+    const agent = global.signin()
+
+    const { id } = await createTicket(agent)
+
+    const ticket = await Ticket.findById(id)
+    ticket!.set({ orderId: mongoose.Types.ObjectId().toHexString() })
+    await ticket!.save()
+
+    await agent.put(`/api/tickets/${id}`).send({ title, price }).expect(400)
 })
