@@ -10,7 +10,8 @@ const envKeys = [
     'NATS_URL',
     'NATS_CLUSTER_ID',
     'NATS_CLIENT_ID',
-    'MONGO_URI'
+    'MONGO_URI',
+    'STRIPE_KEY'
 ]
 
 for (const envKey of envKeys) {

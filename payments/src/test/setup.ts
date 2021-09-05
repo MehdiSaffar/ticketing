@@ -5,6 +5,7 @@ import request from 'supertest'
 import jwt from 'jsonwebtoken'
 
 jest.mock('../nats-wrapper')
+jest.mock('../stripe')
 
 let mongo: MongoMemoryServer
 
