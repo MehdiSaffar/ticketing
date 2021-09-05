@@ -4,6 +4,7 @@ import { app } from '../../app'
 import { Order, OrderStatus } from '../../models/order'
 import { natsWrapper } from '../../nats-wrapper'
 import { stripe } from '../../stripe'
+import { Payment } from '../../models/payment'
 
 const token = 'tok_visa'
 
@@ -70,9 +71,18 @@ it('returns 201 with valid inputs', async () => {
 
     expect(stripe.charges.create).toHaveBeenCalled()
 
-    const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0]
+    const mockFn = stripe.charges.create as jest.Mock
+
+    const chargeOptions = mockFn.mock.calls[0][0]
+    const chargeResult = await mockFn.mock.results[0].value
 
     expect(chargeOptions.source).toEqual(token)
     expect(chargeOptions.amount).toEqual(order.price * 100)
     expect(chargeOptions.currency).toEqual('usd')
+
+    const payment = await Payment.findOne({
+        orderId: order.id,
+        stripeId: chargeResult.id
+    })
+    expect(payment).not.toBeNull()
 })
