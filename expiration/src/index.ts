@@ -1,3 +1,4 @@
+import { OrderCreatedListener } from './events/listeners/order-created-listener'
 import { natsWrapper } from './nats-wrapper'
 
 const envKeys = ['NATS_URL', 'NATS_CLUSTER_ID', 'NATS_CLIENT_ID']
@@ -30,6 +31,8 @@ const start = async () => {
 
         process.on('SIGINT', shutdown)
         process.on('SIGTERM', shutdown)
+
+        new OrderCreatedListener(natsWrapper.client).listen()
     } catch (e) {
         console.error(e)
     }
