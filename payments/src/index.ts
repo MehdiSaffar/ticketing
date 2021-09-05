@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 import { app } from './app'
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener'
+import { OrderCreatedListener } from './events/listeners/order-created-listener'
 import { natsWrapper } from './nats-wrapper'
 
 const envKeys = [
@@ -50,6 +52,9 @@ const start = async () => {
 
         process.on('SIGINT', shutdown)
         process.on('SIGTERM', shutdown)
+
+        new OrderCreatedListener(natsWrapper.client).listen()
+        new OrderCancelledListener(natsWrapper.client).listen()
     } catch (e) {
         console.error(e)
     }

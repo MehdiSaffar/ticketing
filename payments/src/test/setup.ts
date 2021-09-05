@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
-import { app } from '../../app'
+import { app } from '../app'
 import request from 'supertest'
 import jwt from 'jsonwebtoken'
 
@@ -38,14 +38,13 @@ afterAll(async () => {
 })
 
 declare global {
-    var signin: () => request.SuperAgentTest
+    var signin: (id?: string) => request.SuperTest<request.Test>
 }
 
-global.signin = () => {
+global.signin = (id?: string) => {
     // build jwt payload
-    const id = new mongoose.Types.ObjectId().toHexString()
     const payload = {
-        id,
+        id: id ?? new mongoose.Types.ObjectId().toHexString(),
         email: 'test@test.com'
     }
 
