@@ -9,7 +9,9 @@ export default function Signin() {
         onSuccess: () => Router.push('/')
     })
 
-    useEffect(doRequest, [])
+    useEffect(() => {
+        doRequest()
+    }, [])
 
     return <div>Signing you out...</div>
 }

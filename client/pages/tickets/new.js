@@ -15,9 +15,9 @@ export default function NewTicket() {
         onSuccess: () => Router.push('/')
     })
 
-    const onSubmit = event => {
+    const onSubmit = async event => {
         event.preventDefault()
-        doRequest()
+        await doRequest()
     }
 
     const onBlur = () => {
