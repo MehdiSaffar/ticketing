@@ -1,9 +1,20 @@
-import * as dfns from 'date-fns'
+import StripeCheckout from 'react-stripe-checkout'
 
 import { useState, useEffect } from 'react'
 
-export default function OrderShow({ order }) {
+import useRequest from '../../hooks/use-request'
+
+export default function OrderShow({ order, currentUser }) {
     const [timeLeft, setTimeLeft] = useState(0)
+    const { doRequest, errors } = useRequest({
+        url: `/api/payments`,
+        method: 'post',
+        body: {
+            orderId: order.id
+        },
+        onSuccess: console.log
+    })
+
     useEffect(() => {
         const findTimeLeft = () => {
             const msLeft = new Date(order.expiresAt) - new Date()
@@ -20,7 +31,21 @@ export default function OrderShow({ order }) {
         return <div>Order Expired</div>
     }
 
-    return <div>{timeLeft} seconds until order expires</div>
+    return (
+        <div>
+            {timeLeft} seconds until order expires
+            {errors}
+            <StripeCheckout
+                token={async token => {
+                    const { id } = token
+                    doRequest({ token: id })
+                }}
+                stripeKey="pk_test_51JWQPrBxjoXIME6A2GapiMTrv5b8OviYnop4Hemq1y1VjyEMS82gGKv38sQFhgl69KNYG3PRVyxajUkThKKanXrI00lygPXHgY"
+                amount={order.ticket.price * 100}
+                email={currentUser.email}
+            />
+        </div>
+    )
 }
 
 OrderShow.getInitialProps = async (ctx, client) => {
