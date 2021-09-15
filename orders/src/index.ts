@@ -22,6 +22,8 @@ for (const envKey of envKeys) {
 }
 
 const start = async () => {
+    console.log('starting...');
+    
     try {
         await natsWrapper.connect(
             process.env.NATS_CLUSTER_ID!,
