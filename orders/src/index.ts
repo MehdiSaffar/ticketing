@@ -22,7 +22,7 @@ for (const envKey of envKeys) {
 }
 
 const start = async () => {
-    console.log('starting');
+    console.log('starting...');
     
     try {
         await natsWrapper.connect(
