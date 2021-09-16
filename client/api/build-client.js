@@ -9,7 +9,7 @@ export default function buildClient({ req }) {
         // })
 
         return axios.create({
-            baseURL: 'http://gittix-prod.xyz',
+            baseURL: 'http://www.gittix-prod.xyz',
             headers: req.headers
         })
     }
