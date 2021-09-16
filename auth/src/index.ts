@@ -10,7 +10,7 @@ if (!process.env.MONGO_URI) {
 }
 
 const start = async () => {
-    console.log('starting up...');
+    console.log('startup...');
     try {
         await mongoose.connect(process.env.MONGO_URI!, {
             useNewUrlParser: true,
