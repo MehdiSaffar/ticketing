@@ -15,6 +15,8 @@ export default function Index({ tickets, currentUser }) {
         )
     })
 
+    // comment
+
     return (
         <div>
             <h2>Tickets</h2>
